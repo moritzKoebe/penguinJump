@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
@@ -78,24 +79,34 @@ public class MainApp extends Application {
     private static int loadHighscore()
     {
         int i;
-        File file = new File(Settings.HIGHSCORE_FILENAME);
         Scanner scanner;
         try {
-            scanner = new Scanner(file);
+            scanner = new Scanner(new File(MainApp.class.getResource("/doodlejump/highscore.txt").toURI()));
             i = scanner.nextInt();
-            
             scanner.close();
+            return i;
         } catch (FileNotFoundException e) {
-            i = 0;
+            System.out.println("Could not load Highscore");
         }
-        return i;
+        catch (URISyntaxException e) {
+        System.out.println("Could not load Highscore");
+        }
+        return 0;
     }
 
-    private static void writeHighscore(int i) throws IOException
+    private static void writeHighscore(int i)
     {
-        PrintWriter writer = new PrintWriter(Settings.HIGHSCORE_FILENAME);
-        writer.print(i);
-        writer.close();
+        PrintWriter writer;
+        try {
+            writer = new PrintWriter(new File(MainApp.class.getResource("/doodlejump/highscore.txt").toURI()));
+            writer.print(i);
+            writer.close();
+        } catch (URISyntaxException e) {
+            System.out.println("Couldnt save highscore");
+        } catch(IOException e)
+        {   System.out.println("Couldnt save highscore");
+        }
+        
     }
 
     @Override
@@ -166,11 +177,7 @@ public class MainApp extends Application {
                 if(gameOver)
                 {
                     if(score > loadHighscore())
-                        try {
-                            writeHighscore((int)score);
-                        } catch (IOException e) {
-                            System.out.println("Couldnt save highscore");
-                        }
+                        writeHighscore((int)score);
                     stop();
                 }
             }
@@ -257,6 +264,8 @@ public class MainApp extends Application {
 
 	public void restart() {
         gameloop.stop();
+        if(score > highscore)
+            writeHighscore((int)score);
         score = 0;
         highscore = loadHighscore();
         highscoreLabel = new Label("Highscore " + (int)highscore);
@@ -266,6 +275,7 @@ public class MainApp extends Application {
         gameOver = false;
         fallingProgression = 0;
         platforms.clear();
+        enemies.clear();
         startGame();
 	}
 

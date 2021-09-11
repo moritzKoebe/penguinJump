@@ -1,7 +1,5 @@
 package doodlejump.Entity;
 
-import java.io.File;
-
 import doodlejump.Control.Settings;
 import doodlejump.Control.Vector2D;
 import javafx.scene.Group;
@@ -25,7 +23,7 @@ public class RocketPlatform extends Platform{
         else
         {
             Group group = new Group();
-            ImageView rocket = new ImageView(new Image(new File("src\\main\\resources\\img\\rocketStanding.png").toURI().toString(),
+            ImageView rocket = new ImageView(new Image(BouncePlatform.class.getResource("/doodlejump/img/springOpen.png").toString(),
             Settings.ROCKET_WIDTH, Settings.ROCKET_HEIGHT, true, true));
             group.getChildren().add(super.createView());
             group.getChildren().add(rocket);

@@ -32,7 +32,6 @@ public class MainMenuController extends AnchorPane{
     public void startGame(ActionEvent event) throws IOException
     {
         //do stuff
-        System.out.println("Game start COntroller");
         mainApp.startGame();
     }
 }

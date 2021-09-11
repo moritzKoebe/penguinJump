@@ -95,4 +95,12 @@ public class SoundManager {
     {
         hit.play();
     }
+
+    public void stopPropeller() {
+        propeller.stop();
+    }
+
+    public void stopRocket() {
+        rocket.stop();
+    }
 }

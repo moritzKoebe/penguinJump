@@ -13,9 +13,9 @@ public class Player extends Sprite{
     private boolean moveRight, moveLeft, bouncing, propeller, rocket, shoot, falling, dead;
     private double rightBorder, bounceProgression, propellerProgression, rocketProgession, shotProgression;
     private MainApp mainApp;
-    private SoundManager soundaManager;
+    private SoundManager soundManager;
 
-    public Player(Layer layer, Vector2D location, MainApp mainApp, SoundManager soundaManager) 
+    public Player(Layer layer, Vector2D location, MainApp mainApp, SoundManager soundManager) 
     {
         super(layer, location, new Vector2D(0, Settings.JUMP_VELOCITY), new Vector2D(0, Settings.GRAVITY), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT);
         this.rightBorder = Settings.SCENE_WIDTH;
@@ -32,7 +32,7 @@ public class Player extends Sprite{
         this.falling = false;
         this.dead = false;
         this.mainApp = mainApp;
-        this.soundaManager = soundaManager;
+        this.soundManager = soundManager;
     }
 
     @Override
@@ -147,40 +147,44 @@ public class Player extends Sprite{
 
     public void jump() {
         velocity = new Vector2D(velocity.x, Settings.JUMP_VELOCITY);
-        soundaManager.playJump();
+        soundManager.playJump();
     }
 
     public void springJump() {
         velocity = new Vector2D(velocity.x, Settings.SPRING_JUMP_VELOCITY);
-        soundaManager.playSpring();
+        soundManager.playSpring();
     }
 
     public void bounceJump() {
         bouncing = true;
         velocity = new Vector2D(velocity.x, Settings.BOUNCE_JUMP_VELOCITY);
-        soundaManager.playBounce();
+        soundManager.playBounce();
     }
 
     public void propeller()
     {
         if(!rocket)
         {
+            if(propeller)
+                soundManager.stopPropeller();
             propeller = true;
             acceleration = new Vector2D(0, 0);
             velocity = new Vector2D(0, Settings.PROPELLER_SPEED);
             updateView();
-            soundaManager.playPropeller();
+            soundManager.playPropeller();
         }
     }
 
     public void rocket() {
         if(!propeller)
         {
+            if(rocket)
+                soundManager.stopRocket();
             rocket = true;
             acceleration = new Vector2D(0, Settings.ROCKET_ACCELERATION);
             velocity = new Vector2D(0, Settings.ROCKET_SPEED);
             updateView();
-            soundaManager.playRocket();
+            soundManager.playRocket();
         }
     }
 
@@ -192,7 +196,7 @@ public class Player extends Sprite{
             mainApp.generateProjectile();
             shotProgression = 0;
             updateView();
-            soundaManager.playShot();
+            soundManager.playShot();
         }
     }
 
@@ -200,7 +204,7 @@ public class Player extends Sprite{
     {
         this.falling = true;
         updateView();
-        soundaManager.playFalling();
+        soundManager.playFalling();
     }
 
     public boolean getFalling()
