@@ -13,10 +13,13 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.util.Scanner;
 
 import doodlejump.Boundary.*;
@@ -78,35 +81,31 @@ public class MainApp extends Application {
 
     private static int loadHighscore()
     {
-        int i;
-        Scanner scanner;
         try {
-            scanner = new Scanner(new File(MainApp.class.getResource("/doodlejump/highscore.txt").toURI()));
-            i = scanner.nextInt();
+            Scanner scanner = new Scanner(new File("highscore.txt"));
+            int i = scanner.nextInt();
             scanner.close();
+            System.out.println(i);
             return i;
         } catch (FileNotFoundException e) {
-            System.out.println("Could not load Highscore");
-        }
-        catch (URISyntaxException e) {
-        System.out.println("Could not load Highscore");
+            System.out.println("Could not load highscore");
         }
         return 0;
     }
 
     private static void writeHighscore(int i)
     {
-        PrintWriter writer;
+        new File("highscore.txt").delete();
         try {
-            writer = new PrintWriter(new File(MainApp.class.getResource("/doodlejump/highscore.txt").toURI()));
-            writer.print(i);
-            writer.close();
-        } catch (URISyntaxException e) {
-            System.out.println("Couldnt save highscore");
-        } catch(IOException e)
-        {   System.out.println("Couldnt save highscore");
+            File file = new File("highscore.txt");
+            file.createNewFile();
+            FileWriter fileWriter = new FileWriter(file);
+            fileWriter.write(Integer.toString(i));
+            fileWriter.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-        
     }
 
     @Override
